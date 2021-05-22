@@ -69,6 +69,7 @@ export default {
 
 <style scoped>
 canvas {
+  width: 100%;
   image-rendering: optimizeSpeed;
   image-rendering: -moz-crisp-edges;
   image-rendering: -webkit-optimize-contrast;
