@@ -6,7 +6,7 @@
       </b-card>
     </div>
     <div class="card-q" v-else>
-      <span v-if="!startQuiz">
+      <span v-if="!startQuiz && !addQuestion">
         <b-card
           title="Simple Quiz Application"
           style="max-width: 20rem"
@@ -18,7 +18,7 @@
             fluid
             id="img"
           ></b-img>
-          
+
           <b-card-text>
             Based on the work of Arpan Adhikari:
             <a
@@ -29,26 +29,39 @@
             </a>
           </b-card-text>
           <b-button @click="startQuizFunc()">Start Quiz</b-button>
+          <br />
+          <b-button @click="addQuestionFunc()">Add a question</b-button>
         </b-card>
       </span>
-      <span v-else>
+      <span v-else-if="!addQuestion">
         <b-card
           title="Simple Quiz Application"
           style="max-width: 20rem"
           class="mb-3"
           img-top
         >
+          <Pixel
+            :imgUrl="`${questions[currentQuestion].questionMedias[2].src}`"
+            v-if="
+              questions[currentQuestion].questionMedias[2].filter == 'pixelise'
+            "
+          />
+          <Flash
+            :imgUrl="`${questions[currentQuestion].questionMedias[2].src}`"
+            v-else-if="
+              questions[currentQuestion].questionMedias[2].filter == 'flash'
+            "
+          />
           <b-img
+            v-else
             :src="
-              require(`./assets/${questions[currentQuestion].questionImage}`)
+              require(`./assets/${questions[currentQuestion].questionMedias[2].src}`)
             "
             alt="Image"
             fluid
             thumbnail
             id="img"
           ></b-img>
-           <Pixel :imgUrl="`${questions[currentQuestion].questionImage}`"/>
-         <Flash/>
           <b-card-text>
             Question No.{{ currentQuestion + 1 }} of {{ questions.length }}
           </b-card-text>
@@ -81,18 +94,23 @@
           </div>
         </b-card>
       </span>
+      <span v-if="addQuestion">
+        <Form />
+      </span>
     </div>
   </div>
 </template>
 
 <script>
-import Pixel from './Pixel.vue'
-import  $ from 'jquery'
-import Flash from './Flashlight.vue'
-
+import Pixel from "./Pixel.vue";
+import $ from "jquery";
+import Flash from "./Flashlight.vue";
+import Form from "./Form.vue";
 export default {
-   components: {
-    Pixel,Flash
+  components: {
+    Pixel,
+    Flash,
+    Form,
   },
   data() {
     return {
@@ -102,8 +120,9 @@ export default {
       countDown: 30,
       timer: null,
       startQuiz: false,
+      addQuestion: false,
       img1: null,
-      questions_2: [
+      questions: [
         {
           questionText: "Who painted this picture?",
           questionMedias: [
@@ -120,7 +139,7 @@ export default {
             {
               type: "image",
               src: "Gustav_Klimt.jpg",
-              filter: "pixelise",
+              filter: "flash",
             },
           ],
           multiple_correct_answers: "false",
@@ -137,9 +156,75 @@ export default {
           category: "painting",
           difficulty: "easy",
         },
+        {
+          questionText: "Who painted this picture?",
+          questionMedias: [
+            {
+              type: "video",
+              src: "/video.mp4",
+              in: 55,
+              out: 90,
+            },
+            {
+              type: "audio",
+              src: "/sound.mp3",
+            },
+            {
+              type: "image",
+              src: "Paul_Klee.jpg",
+              filter: "pixelise",
+            },
+          ],
+          multiple_correct_answers: "false",
+          answerOptions: [
+            {
+              answerText: "Salvador Dali",
+              answerImage: "dali.jpg",
+              isCorrect: false,
+            },
+            { answerText: "Gustav Klimt", isCorrect: false },
+            { answerText: "Paul Klee", isCorrect: true },
+            { answerText: "Jackson Pollock", isCorrect: false },
+          ],
+          category: "painting",
+          difficulty: "easy",
+        },
+        {
+          questionText: "Who painted this picture?",
+          questionMedias: [
+            {
+              type: "video",
+              src: "/video.mp4",
+              in: 55,
+              out: 90,
+            },
+            {
+              type: "audio",
+              src: "/sound.mp3",
+            },
+            {
+              type: "image",
+              src: "Salvador_Dali.jpg",
+              filter: "none",
+            },
+          ],
+          multiple_correct_answers: "false",
+          answerOptions: [
+            {
+              answerText: "Salvador Dali",
+              answerImage: "dali.jpg",
+              isCorrect: true,
+            },
+            { answerText: "Gustav Klimt", isCorrect: false },
+            { answerText: "Paul Klee", isCorrect: false },
+            { answerText: "Jackson Pollock", isCorrect: false },
+          ],
+          category: "painting",
+          difficulty: "easy",
+        },
       ],
 
-      questions: [
+      questions_2: [
         {
           questionText: "Who painted this picture?",
           questionImage: "Gustav_Klimt.jpg",
@@ -198,7 +283,7 @@ export default {
         this.currentQuestion = nextQuestion;
         // this.$store.state.questionAttended = this.currentQuestion;
         // localStorage.setItem('qattended', this.currentQuestion)
-        $("#img").hide();
+        // $("#img").hide();
         this.countDown = 30;
         this.countDownTimer();
       } else {
@@ -206,7 +291,6 @@ export default {
         this.showScore = true;
         // localStorage.setItem('testComplete',this.showScore)
       }
-     
     },
     countDownTimer() {
       if (this.countDown > 0) {
@@ -218,16 +302,17 @@ export default {
         this.handleAnswerClick(false);
       }
     },
-
-  created() {
-    //  alert(this.$store.state.questionAttended)
-    //    this.showScore = localStorage.getItem('testComplete') || false
-    //    this.currentQuestion = localStorage.getItem('qattended') || 0
-    //    this.countDownTimer()
-    //    this.fetchQuiz()
+    addQuestionFunc() {
+      this.addQuestion = true;
+    },
+    created() {
+      //  alert(this.$store.state.questionAttended)
+      //    this.showScore = localStorage.getItem('testComplete') || false
+      //    this.currentQuestion = localStorage.getItem('qattended') || 0
+      //    this.countDownTimer()
+      //    this.fetchQuiz()
+    },
   },
-
-  }
 };
 </script>
 

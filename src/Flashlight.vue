@@ -1,7 +1,14 @@
 <template>
   <div class="content-wrap" @mousemove="mouseMove">
     <div class="img-wrapper">
-      <img src="https://media.timeout.com/images/105590782/750/422/image.jpg" />
+        <b-img
+        :src="
+              require(`./assets/${imgUrl}`)
+            "
+            alt="Image"
+            fluid
+            thumbnail
+            id="img"></b-img>
     </div>
     <div class="hover-overlay"></div>
   </div>
@@ -10,10 +17,17 @@
 <script>
 import $ from "jquery";
 export default {
+
+    props: {
+    imgUrl: {
+      type: String,
+      required: true,
+    },
+  },
+
   mounted() {
     // document.getElementsByClassName("content-wrap")[0].addEventListener('mousemove',this.update)
     // resize the flashlight on time
-    
   },
 
   data() {
@@ -21,7 +35,8 @@ export default {
       rgbaP1: 5,
       rgbaP2: 10,
       polling: null,
-      transform:null,
+      transform: null,
+     
     };
   },
   methods: {
@@ -31,7 +46,6 @@ export default {
         this.rgbaP2 = this.rgbaP2 - 1;
 
         console.log(this.rgbaP1);
-
 
         let bg =
           `background:radial-gradient(
@@ -46,12 +60,12 @@ export default {
   );`;
 
         document.getElementsByClassName("hover-overlay")[0].style = bg;
-        
+
         let overlay = document.querySelector(".hover-overlay");
-        overlay.style.transform =   this.transform;
+        overlay.style.transform = this.transform;
       }, 3000);
     },
-    
+
     mouseMove(e) {
       const images = document.querySelectorAll(".img-wrapper");
 
@@ -79,7 +93,7 @@ export default {
         "px - " +
         heigh +
         "px))";
-        this.transform=   overlay.style.transform;
+      this.transform = overlay.style.transform;
     },
   },
 };
@@ -140,150 +154,165 @@ img {
   pointer-events: none;
 }
 @keyframes colorChange {
- 
+  from {
+    background: radial-gradient(
+      circle at center,
+      rgba(255, 255, 255, 0.034) 4.7%,
+      rgba(19, 19, 19, 0.959) 9.7%,
+      #000000 100%
+    );
+  }
   0% {
     background: radial-gradient(
-    circle at center,
-    rgba(255, 255, 255, 0.034) 4.7%,
-    rgba(19, 19, 19, 0.959) 9.7%,
-    #000000 100%
-  )
+      circle at center,
+      rgba(255, 255, 255, 0.034) 4.7%,
+      rgba(19, 19, 19, 0.959) 9.7%,
+      #000000 100%
+    );
   }
-   5% {
+  5% {
     background: radial-gradient(
-    circle at center,
-    rgba(255, 255, 255, 0.034) 4.5%,
-    rgba(19, 19, 19, 0.959) 9.5%,
-    #000000 100%
-  )
+      circle at center,
+      rgba(255, 255, 255, 0.034) 4.5%,
+      rgba(19, 19, 19, 0.959) 9.5%,
+      #000000 100%
+    );
   }
-   10% {
+  10% {
     background: radial-gradient(
-    circle at center,
-    rgba(255, 255, 255, 0.034) 4.2%,
-    rgba(19, 19, 19, 0.959) 9.1%,
-    #000000 100%
-  )
+      circle at center,
+      rgba(255, 255, 255, 0.034) 4.2%,
+      rgba(19, 19, 19, 0.959) 9.1%,
+      #000000 100%
+    );
   }
-    15% {
+  15% {
     background: radial-gradient(
-    circle at center,
-    rgba(255, 255, 255, 0.034) 4%,
-    rgba(19, 19, 19, 0.959) 8.8%,
-    #000000 100%
-  )
+      circle at center,
+      rgba(255, 255, 255, 0.034) 4%,
+      rgba(19, 19, 19, 0.959) 8.8%,
+      #000000 100%
+    );
   }
-   30% {
+  30% {
     background: radial-gradient(
-    circle at center,
-    rgba(255, 255, 255, 0.034)3.8%,
-    rgba(19, 19, 19, 0.959) 8.5%,
-    #000000 100%
-  )
+      circle at center,
+      rgba(255, 255, 255, 0.034) 3.8%,
+      rgba(19, 19, 19, 0.959) 8.5%,
+      #000000 100%
+    );
   }
-     35% {
+  35% {
     background: radial-gradient(
-    circle at center,
-    rgba(255, 255, 255, 0.034)3.8%,
-    rgba(19, 19, 19, 0.959) 8.5%,
-    #000000 100%
-  )
+      circle at center,
+      rgba(255, 255, 255, 0.034) 3.8%,
+      rgba(19, 19, 19, 0.959) 8.5%,
+      #000000 100%
+    );
   }
-     40% {
+  40% {
     background: radial-gradient(
-    circle at center,
-    rgba(255, 255, 255, 0.034)3.5%,
-    rgba(19, 19, 19, 0.959) 8.3%,
-    #000000 100%
-  )
+      circle at center,
+      rgba(255, 255, 255, 0.034) 3.5%,
+      rgba(19, 19, 19, 0.959) 8.3%,
+      #000000 100%
+    );
   }
-     45% {
+  45% {
     background: radial-gradient(
-    circle at center,
-    rgba(255, 255, 255, 0.034)3.2%,
-    rgba(19, 19, 19, 0.959) 8%,
-    #000000 100%
-  )
+      circle at center,
+      rgba(255, 255, 255, 0.034) 3.2%,
+      rgba(19, 19, 19, 0.959) 8%,
+      #000000 100%
+    );
   }
-    50% {
+  50% {
     background: radial-gradient(
-    circle at center,
-    rgba(255, 255, 255, 0.034)3%,
-    rgba(19, 19, 19, 0.959) 7.8%,
-    #000000 100%
-  )
+      circle at center,
+      rgba(255, 255, 255, 0.034) 3%,
+      rgba(19, 19, 19, 0.959) 7.8%,
+      #000000 100%
+    );
   }
   55% {
     background: radial-gradient(
-    circle at center,
-    rgba(255, 255, 255, 0.034)2.8%,
-    rgba(19, 19, 19, 0.959) 7.5%,
-    #000000 100%
-  )
+      circle at center,
+      rgba(255, 255, 255, 0.034) 2.8%,
+      rgba(19, 19, 19, 0.959) 7.5%,
+      #000000 100%
+    );
   }
-   60% {
+  60% {
     background: radial-gradient(
-    circle at center,
-    rgba(255, 255, 255, 0.034)2.5%,
-    rgba(19, 19, 19, 0.959) 7.2%,
-    #000000 100%
-  )
+      circle at center,
+      rgba(255, 255, 255, 0.034) 2.5%,
+      rgba(19, 19, 19, 0.959) 7.2%,
+      #000000 100%
+    );
   }
   65% {
     background: radial-gradient(
-    circle at center,
-    rgba(255, 255, 255, 0.034)2.2%,
-    rgba(19, 19, 19, 0.959) 6.9%,
-    #000000 100%
-  )
+      circle at center,
+      rgba(255, 255, 255, 0.034) 2.2%,
+      rgba(19, 19, 19, 0.959) 6.9%,
+      #000000 100%
+    );
   }
-   70% {
+  70% {
     background: radial-gradient(
-    circle at center,
-    rgba(255, 255, 255, 0.034)1.5%,
-    rgba(19, 19, 19, 0.959)6.5%,
-    #000000 100%
-  )
+      circle at center,
+      rgba(255, 255, 255, 0.034) 1.5%,
+      rgba(19, 19, 19, 0.959) 6.5%,
+      #000000 100%
+    );
   }
-   75% {
+  75% {
     background: radial-gradient(
-    circle at center,
-    rgba(255, 255, 255, 0.034)1%,
-    rgba(19, 19, 19, 0.959)6%,
-    #000000 100%
-  )
+      circle at center,
+      rgba(255, 255, 255, 0.034) 1%,
+      rgba(19, 19, 19, 0.959) 6%,
+      #000000 100%
+    );
   }
-   80% {
+  80% {
     background: radial-gradient(
-    circle at center,
-    rgba(255, 255, 255, 0.034)0.5%,
-    rgba(19, 19, 19, 0.959)5%,
-    #000000 100%
-  )
+      circle at center,
+      rgba(255, 255, 255, 0.034) 0.5%,
+      rgba(19, 19, 19, 0.959) 5%,
+      #000000 100%
+    );
   }
-   90% {
+  90% {
     background: radial-gradient(
-    circle at center,
-    rgba(255, 255, 255, 0.034)0%,
-    rgba(19, 19, 19, 0.959)5%,
-    #000000 100%
-  )
+      circle at center,
+      rgba(255, 255, 255, 0.034) 0%,
+      rgba(19, 19, 19, 0.959) 5%,
+      #000000 100%
+    );
   }
-     90% {
+  90% {
     background: radial-gradient(
-    circle at center,
-    rgba(255, 255, 255, 0.034)0%,
-    rgba(19, 19, 19, 0.959)2.5%,
-    #000000 100%
-  )
+      circle at center,
+      rgba(255, 255, 255, 0.034) 0%,
+      rgba(19, 19, 19, 0.959) 2.5%,
+      #000000 100%
+    );
   }
-   95% {
+  95% {
     background: radial-gradient(
-    circle at center,
-    rgba(255, 255, 255, 0.034)0%,
-    rgba(19, 19, 19, 0.959)0%,
-    #000000 100%
-  )
+      circle at center,
+      rgba(255, 255, 255, 0.034) 0%,
+      rgba(19, 19, 19, 0.959) 0%,
+      #000000 100%
+    );
   }
- }
+  to {
+    background: radial-gradient(
+      circle at center,
+      rgba(255, 255, 255, 0.034) 0%,
+      rgba(19, 19, 19, 0.959) 0%,
+      #000000 100%
+    );
+  }
+}
 </style>
