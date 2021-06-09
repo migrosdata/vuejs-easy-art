@@ -15,6 +15,10 @@ export default {
       type: String,
       required: true,
     },
+    difficulty: {
+      type: String,
+      required: true,
+    },
   },
 
   watch: {
@@ -41,7 +45,7 @@ export default {
       // MAIN function
       function pixelate(v) {
         // if in play mode use that value, else use slider value
-        var size = 10 * 0.01,
+        var size = 1000 * 0.01,
           // cache scaled width and height
           w = canvas.width * size,
           h = canvas.height * size;

@@ -13,7 +13,9 @@
         "bootstrap-vue": "^2.20.1",
         "core-js": "^3.6.5",
         "jquerry": "0.0.1-security",
-        "vue": "^2.6.11"
+        "vue": "^2.6.11",
+        "vue-qrcode-reader": "^3.0.1",
+        "vue-video-player": "^5.0.2"
     },
     "devDependencies": {
         "@vue/cli-plugin-babel": "~4.5.0",
@@ -23,6 +25,7 @@
         "eslint": "^6.7.2",
         "eslint-plugin-vue": "^6.2.2",
         "execa": "latest",
+        "video.js": "^7.12.3",
         "vue-template-compiler": "^2.6.11"
     },
     "eslintConfig": {
@@ -37,7 +40,9 @@
         "parserOptions": {
             "parser": "babel-eslint"
         },
-        "rules": { "no-unused-vars": "off" }
+        "rules": {
+            "no-unused-vars": "off"
+        }
     },
     "browserslist": [
         "> 1%",

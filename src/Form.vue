@@ -240,6 +240,9 @@ questions : [
       this.form.questionMedias = temp_files;
       console.log(event.target.files);
     },
+      saveFile: function() {
+       
+  }
   },
 };
 </script>
