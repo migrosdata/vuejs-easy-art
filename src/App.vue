@@ -8,11 +8,13 @@
       />
   <span v-if="this.questionId">
     <div class="card-q">
-           <img
-        class="mb-4"
-        :src="require('./assets/leo.jpg')"
-        alt=""
-      />
+        <b-img
+          :src="require('./assets/leo.jpg')"
+          alt="Image"
+          fluid
+          thumbnail
+          id="imgArtist"
+        ></b-img>
     </div>  
   </span>
   <span v-else-if="!this.logIn">
