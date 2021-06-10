@@ -6,12 +6,21 @@
         alt=""
       
       />
-   <span v-if="!this.logIn">
-    <Login @logIn="login"/>
-       </span>
-         <span v-else>
+  <span v-if="this.questionId">
+    <div class="card-q">
+           <img
+        class="mb-4"
+        :src="require('./assets/leo.jpg')"
+        alt=""
+      />
+    </div>  
+  </span>
+  <span v-else-if="!this.logIn">
+      <Login @logIn="login"/>
+  </span>
+  <span v-else>
     <Menu :userName="this.userName"/>
-       </span>
+  </span>
   </div>
 </template>
 
@@ -23,16 +32,35 @@ import Menu from './component/Menu.vue'
 export default {
   name: 'App',
   components: {
-Login,Menu
+    Login,Menu
   },
     data() {
-    return {
-      logIn:false,
-      startQuiz:false,
-    userName:"",
-      }
-    
-    ;
+      return {
+        logIn:false,
+        startQuiz:false,
+        userName:"",
+        questionId:"",
+      };
+    },
+  created()
+  {
+    let uri = window.location.href.split('?');
+    if (uri.length == 2)
+    {
+      let vars = uri[1].split('&');
+      let getVars = {};
+      let tmp = '';
+      vars.forEach((v) => {
+        tmp = v.split('=');
+        if(tmp.length == 2)
+          getVars[tmp[0]] = tmp[1];
+          if (tmp[0] === "question") {
+            this.questionId = tmp[1]
+          }
+      });
+      console.log(getVars);
+      // do 
+    }
   },
   methods:{
     login(name){
