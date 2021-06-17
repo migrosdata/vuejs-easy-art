@@ -1,7 +1,12 @@
 <template>
-  <b-card title="Simple Quiz Application" style="max-width: 20rem" class="mb-2">
+  <b-card title="Add a question" style="max-width: 20rem" class="mb-2">
     <b-form @submit="onSubmit" @reset="onReset" v-if="show">
-      <b-form-group id="input-group-1" label="Question:" label-for="input-1">
+      <b-form-group
+        id="input-group-1"
+        label="Question:"
+        label-for="input-1"
+        label-align="left"
+      >
         <b-form-input
           id="input-1"
           v-model="form.questionText"
@@ -13,26 +18,52 @@
         id="input-group-1"
         label="Drop question media here:"
         label-for="input-1"
+        label-align="left"
       >
         <b-form-file
+          id="file"
+          name="file"
           multiple
           placeholder="Choose a file or drop it here..."
           drop-placeholder="Drop file here..."
           @change="previewFiles"
         ></b-form-file
       ></b-form-group>
+      <b-form-group
+        id="input-group-3"
+        label="Type of question :"
+        label-for="input-3"
+        label-align="left"
+      >
+        <b-form-select
+          id="input-3"
+          v-model="form.questionType"
+          :options="questionType"
+          required
+        ></b-form-select>
+      </b-form-group>
 
-      <b-form-group id="input-group-3" label="Filter:" label-for="input-3">
+      <b-form-group
+        id="input-group-3"
+        label="Filter:"
+        label-for="input-3"
+        label-align="left"
+        v-if="form.questionType == 'imagequestion'"
+      >
         <b-form-select
           id="input-3"
           v-model="selectedfilter"
           :options="filters"
           required
-            @change="setFilter"
+          @change="setFilter"
         ></b-form-select>
       </b-form-group>
 
-      <b-form-group label="Multiply-answear" v-slot="{ ariaDescribedby }">
+      <b-form-group
+        label="Multiply-answear"
+        label-align="left"
+        v-slot="{ ariaDescribedby }"
+      >
         <b-form-radio
           v-model="form.multiple_correct_answers"
           :aria-describedby="ariaDescribedby"
@@ -51,16 +82,16 @@
 
       <div v-for="(answer, index) in form.answerOptions" :key="index">
         <b-form-group>
-          <b-form-input v-model="answer.value" />
+          <b-form-input v-model="answer.answerText" />
           <b-form-radio-group
             label="Radios using sub-components"
             v-slot="{ index }"
-         
+            label-align="left"
           >
             <b-form-radio
               v-model="answer.isCorrect"
               :aria-describedby="index"
-            name="correct"
+              name="correct"
               value="true"
               >correct</b-form-radio
             >
@@ -75,11 +106,16 @@
         </b-form-group>
       </div>
       <b-button @click="addAnswear">Add answear</b-button>
-      <br>
-         <br>
-            <br>
+      <br />
+      <br />
+      <br />
 
-  <b-form-group id="input-group-3" label="Category:" label-for="input-3">
+      <b-form-group
+        id="input-group-3"
+        label="Category:"
+        label-for="input-3"
+        label-align="left"
+      >
         <b-form-select
           id="input-3"
           v-model="form.category"
@@ -87,36 +123,34 @@
           required
         ></b-form-select>
       </b-form-group>
-       <b-form-radio-group
-            label="Difficulty"
-          >
-            <b-form-radio
-              v-model="form.difficulty"
-              :aria-describedby="index"
-            name="easy"
-              value="easy"
-              >easy</b-form-radio
-            >
-            <b-form-radio
-              v-model="form.difficulty"
-              :aria-describedby="index"
-              name="medium"
-              value="medium"
-              >medium</b-form-radio
-            >
-                  <b-form-radio
-              v-model="form.difficulty"
-              :aria-describedby="index"
-              name="hard"
-              value="hard"
-              >hard</b-form-radio
-            >
-          </b-form-radio-group>
-
-
-      <b-button type="submit" variant="primary">Submit</b-button>
-      <b-button type="reset" variant="danger">Reset</b-button>
-      <b-button  @click="back" variant="info">Back</b-button>
+      <b-form-radio-group label="Difficulty" label-align="left">
+        <b-form-radio
+          v-model="form.difficulty"
+          :aria-describedby="index"
+          name="easy"
+          value="easy"
+          >easy</b-form-radio
+        >
+        <b-form-radio
+          v-model="form.difficulty"
+          :aria-describedby="index"
+          name="medium"
+          value="medium"
+          >medium</b-form-radio
+        >
+        <b-form-radio
+          v-model="form.difficulty"
+          :aria-describedby="index"
+          name="hard"
+          value="hard"
+          >hard</b-form-radio
+        >
+      </b-form-radio-group>
+      <br />
+      <b-button-group>
+        <b-button @click="saveFile" variant="primary">Submit</b-button>
+        <b-button @click="back" variant="info">Back</b-button>
+      </b-button-group>
     </b-form>
     <b-card class="mt-3" header="Form Data Result">
       <pre class="m-0">{{ form }}</pre>
@@ -125,27 +159,50 @@
 </template>
 
 <script>
+import $ from "jquery";
+import UploadService from "./services/UploadFilesService";
 export default {
+  props: {
+    questions: { type: Array, required: true },
+  },
   data() {
     return {
       file: null,
       selectedfilter: null,
       form: {
+        id: this.questions.length + 1,
         questionText: "",
         multiple_correct_answers: [],
+        questionType: "",
         questionMedias: [
           {
-            type: "",
+            type: "video",
             src: "",
-            filter: this.selectedfilter,
+            in: "",
+            out: "",
+          },
+          {
+            type: "audio",
+            src: "",
+          },
+          {
+            type: "image",
+            src: "",
+            filter: "",
           },
         ],
         answerOptions: [],
-        category:"",
-           difficulty:"",
+        category: "",
+        difficulty: "",
       },
-      filters: [{ text: "Select One", value: null }, "Pixels", "Flash"],
-        categories: [{ text: "Select One", value: null }, "painting", "history"],
+      filters: [{ text: "Select One", value: null }, "pixelise", "flash"],
+      categories: [{ text: "Select One", value: null }, "painting", "history"],
+      questionType: [
+        { text: "Select One", value: null },
+        "qrquestion",
+        "imagequestion",
+        "videoquestion",
+      ],
       show: true,
     };
   },
@@ -199,17 +256,12 @@ questions : [
     addAnswear: function () {
       this.form.answerOptions.push({ value: "" });
     },
-    back: function () {
-    
-    },
     setFilter: function () {
-     this.form.questionMedias.forEach(element => {
+      this.form.questionMedias.forEach((element) => {
         if (element.type.includes("image")) {
-      
           element.filter = this.selectedfilter;
-
         }
-    });
+      });
     },
     onReset(event) {
       event.preventDefault();
@@ -224,25 +276,61 @@ questions : [
         this.show = true;
       });
     },
+    // Upload file
+    uploadFile() {
+      var fd = new FormData();
+      var files = $("#file")[0].files;
+
+      // Check file selected or not
+      if (files.length > 0) {
+        fd.append("file", files[0]);
+
+        $.ajax({
+          url: "http://testdeveloppement.site/easyart/uploadfile.php",
+          type: "post",
+          data: fd,
+          contentType: false,
+          processData: false,
+          success: function (response) {
+            if (response != 0) {
+              alert("file  uploaded");
+            } else {
+              alert("file not uploaded");
+            }
+          },
+        });
+      } else {
+        alert("Please select a file.");
+      }
+    },
     previewFiles(event) {
       let temp_files = [];
+
+      this.file = event.target.files;
       event.target.files.forEach((element) => {
         let temp_file = {};
 
         if (element.type.includes("image")) {
-          temp_file.type = "image";
-          temp_file.filter = this.selectedfilter;
-          temp_file.src = element.name;
+            this.form.questionMedias[2].type = "image";
+        this.form.questionMedias[2].filter = this.selectedfilter;
+          this.form.questionMedias[2].src =
+            "http://testdeveloppement.site/easyart/files/" + element.name;
         }
-        temp_files.push(temp_file);
+
       });
 
-      this.form.questionMedias = temp_files;
+    
       console.log(event.target.files);
     },
-      saveFile: function() {
-       
-  }
+    back: function () {
+      this.$emit("back");
+    },
+    saveFile: function () {
+      this.form.local = -1;
+      this.uploadFile();
+      this.$emit("pushQuestion", this.form);
+      this.back();
+    },
   },
 };
 </script>

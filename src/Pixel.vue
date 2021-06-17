@@ -1,6 +1,5 @@
 <template>
   <div>
-    
     <!-- Canvas -->
     <canvas id="c"></canvas>
     <!-- Add Rectangle Button -->
@@ -17,6 +16,10 @@ export default {
     },
     difficulty: {
       type: String,
+      required: true,
+    },
+    local: {
+      type: Number,
       required: true,
     },
   },
@@ -38,9 +41,11 @@ export default {
 
       // some image, we are not struck with CORS restrictions as we
       // do not use pixel buffer to pixelate, so any image will do
-      img.src = require(`./assets/${val}`) 
-      console.log(img.src)
-      
+      console.log("local", this.local);
+      if (this.local > 0) img.src = require(`./assets/${val}`);
+      else img.src = val;
+
+      console.log(img.src);
 
       // MAIN function
       function pixelate(v) {
@@ -61,45 +66,48 @@ export default {
 
       // poly-fill for requestAnmationFrame with fallback for older
       // browsers which do not support rAF.
-      
     },
   },
-  mounted() {  
-   
-      var canvas = document.getElementById("c");
-      var ctx = canvas.getContext("2d");
-      this.vueCanvas = ctx;
-      let img = new Image();
-      // turn off image smoothing - this will give the pixelated effect
-      ctx.mozImageSmoothingEnabled = false;
-      ctx.webkitImageSmoothingEnabled = false;
-      ctx.imageSmoothingEnabled = false;
+  mounted() {
+    var canvas = document.getElementById("c");
+    var ctx = canvas.getContext("2d");
+    this.vueCanvas = ctx;
+    let img = new Image();
+    // turn off image smoothing - this will give the pixelated effect
+    ctx.mozImageSmoothingEnabled = false;
+    ctx.webkitImageSmoothingEnabled = false;
+    ctx.imageSmoothingEnabled = false;
 
-      // wait until image is actually available
-      img.onload = pixelate;
+    // wait until image is actually available
+    img.onload = pixelate;
 
-      // some image, we are not struck with CORS restrictions as we
-      // do not use pixel buffer to pixelate, so any image will do
-      img.src = require(`./assets/${this.imgUrl}`) 
-      console.log(img.src)
-      
+    // some image, we are not struck with CORS restrictions as we
+    // do not use pixel buffer to pixelate, so any image will do
+    console.log("local", this.local);
 
-      // MAIN function
-      function pixelate(v) {
-        // if in play mode use that value, else use slider value
-        var size = 10 * 0.01,
-          // cache scaled width and height
-          w = canvas.width * size,
-          h = canvas.height * size;
+    if (this.local == undefined) img.src = require(`./assets/${this.imgUrl}`);
+    else if (this.local > 0) img.src = require(`./assets/${this.imgUrl}`);
+    else img.src = this.imgUrl;
 
-        console.log(size);
-        // draw original image to the scaled size
-        ctx.drawImage(img, 0, 0, w, h);
+    console.log(img.src);
 
-        // then draw that scaled image thumb back to fill canvas
-        // As smoothing is off the result will be pixelated
-        ctx.drawImage(canvas, 0, 0, w, h, 0, 0, canvas.width, canvas.height);
-      }},
+    // MAIN function
+    function pixelate(v) {
+      // if in play mode use that value, else use slider value
+      var size = 10 * 0.01,
+        // cache scaled width and height
+        w = canvas.width * size,
+        h = canvas.height * size;
+
+      console.log(size);
+      // draw original image to the scaled size
+      ctx.drawImage(img, 0, 0, w, h);
+
+      // then draw that scaled image thumb back to fill canvas
+      // As smoothing is off the result will be pixelated
+      ctx.drawImage(canvas, 0, 0, w, h, 0, 0, canvas.width, canvas.height);
+    }
+  },
   methods: {
     drawRect() {},
   },
