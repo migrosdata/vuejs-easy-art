@@ -9,7 +9,7 @@
   <span v-if="this.questionId">
     <div class="card-q">
         <b-img
-          :src="require('./assets/leo.jpg')"
+          :src="require('./assets/chloe.jpg')"
           alt="Image"
           fluid
           thumbnail
