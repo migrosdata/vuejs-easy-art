@@ -36,18 +36,29 @@
             questions[currentQuestion].questionMedias[2].filter == 'pixelise'
           "
           :difficulty="questions[currentQuestion].difficulty"
+          :local="questions[currentQuestion].local"
         />
         <Flash
           :imgUrl="`${questions[currentQuestion].questionMedias[2].src}`"
           v-else-if="
             questions[currentQuestion].questionMedias[2].filter == 'flash'
           "
+            :local="questions[currentQuestion].local"
         />
 
         <b-img
-          v-else
+          v-else-if="!questions[currentQuestion].local"
           :src="
             require(`./assets/${questions[currentQuestion].questionMedias[2].src}`)
+          "
+          alt="Image"
+          fluid
+          thumbnail
+          id="img"
+        ></b-img>
+                <b-img
+          v-else
+          :src="questions[currentQuestion].questionMedias[2].src
           "
           alt="Image"
           fluid
@@ -136,6 +147,8 @@
 
 </template>
 
+
+
 <script>
 import Pixel from "./Pixel.vue";
 import $ from "jquery";
@@ -145,6 +158,9 @@ import QRreader from "./QRreader.vue";
 import VideoPlayer from "./component/VideoPlayer.vue";
 
 export default {
+    props: {
+ questions: { type: Array, required: true }
+  },
   components: {
     Pixel,
     Flash,
@@ -160,143 +176,7 @@ export default {
       countDown: 30,
       timer: null,
       startQuiz: false,
-      questions: [
-        {
-          id: "1",
-          category: "painting",
-          difficulty: "easy",
-          questionType: "imagequestion",
-                    questionText:"",
-          multiple_correct_answers: "",
-          questionMedias: [
-            {
-              type: "video",
-              src: "/video.mp4",
-              in: 55,
-              out: 90,
-            },
-            {
-              type: "audio",
-              src: "/sound.mp3",
-            },
-            {
-              type: "image",
-              src: "Gustav_Klimt.jpg",
-              filter: "flash",
-            },
-          ],
-          answerOptions: [
-            {
-              answerText: "Salvador Dali",
-              isCorrect: false,
-            },
-            { answerText: "Gustav Klimt", isCorrect: true },
-            { answerText: "Paul Klee", isCorrect: false },
-            { answerText: "Jackson Pollock", isCorrect: false },
-          ],
-        },
-        {
-          id: "2",
-          category: "painting",
-          difficulty: "easy",
-          questionType: "imagequestion",
-          questionText:"",
-          multiple_correct_answers: "",
-          questionMedias: [
-            {
-              type: "video",
-              src: "/video.mp4",
-              in: 55,
-              out: 90,
-            },
-            {
-              type: "audio",
-              src: "/sound.mp3",
-            },
-            {
-              type: "image",
-              src: "Paul_Klee.jpg",
-              filter: "pixelise",
-            },
-          ],
-          answerOptions: [
-            {
-              answerText: "Salvador Dali",
-              isCorrect: false,
-            },
-            { answerText: "Gustav Klimt", isCorrect: false },
-            { answerText: "Paul Klee", isCorrect: true },
-            { answerText: "Jackson Pollock", isCorrect: false },
-          ],
-        },{
-          id: "3",
-          category: "painting",
-          difficulty: "easy",
-          questionType: "qrquestion",
-                    questionText:"Find a painting of Dali",
-          multiple_correct_answers: "",
-          questionMedias: [
-            {
-              type: "video",
-              src: "/video.mp4",
-              in: 55,
-              out: 90,
-            },
-            {
-              type: "audio",
-              src: "/sound.mp3",
-            },
-            {
-              type: "image",
-              src: "Gustav_Klimt.jpg",
-              filter: "flash",
-            },
-          ],
-          answerOptions: [
-            {
-              answerText: "Salvador Dali",
-              isCorrect: true,
-            },
-            { answerText: "Gustav Klimt", isCorrect: false },
-            { answerText: "Paul Klee", isCorrect: false },
-            { answerText: "Jackson Pollock", isCorrect: false },
-          ],
-        },
-                {
-          id: "4",
-          category: "painting",
-          difficulty: "easy",
-          questionType: "videoquestion",
-                    questionText:"",
-          multiple_correct_answers: "",
-          questionMedias: [
-            {
-              type: "video",
-              src: "Un Chien Andalou .mp4",
-              in: 55,
-              out: 90,
-            },
-            {
-              type: "audio",
-              src: "/sound.mp3",
-            },
-            {
-              type: "image",
-              src: "Gustav_Klimt.jpg",
-              filter: "flash",
-            },
-          ],
-          answerOptions: [
-            {
-              answerText: "Salvador Dali",
-              isCorrect: true,
-            },
-            { answerText: "Gustav Klimt", isCorrect: false },
-            { answerText: "Paul Klee", isCorrect: false },
-            { answerText: "Jackson Pollock", isCorrect: false },
-          ],
-        },
-      ],
+  
         videoOptions: {
 				autoplay: true,
 				controls: true,
@@ -313,6 +193,7 @@ export default {
     // `this` est une référence à l'instance de vm
     this.countDownTimer();
      localStorage.clear();
+     console.log(this.questions)
   },
   methods: {
     startQuizFunc() {

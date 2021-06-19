@@ -22,6 +22,14 @@
     </qrcode-stream>
 
     <b-card-text>    {{ questionText }}</b-card-text>
+     <b-button
+            class="ans-option-btn"
+            variant="primary"
+              @click="onDecode(-1)"
+            >I am layz
+            
+            </b-button
+          >
     <br />
     <b-progress
       variant="warning"

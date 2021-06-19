@@ -1,7 +1,15 @@
 <template>
   <div class="content-wrap" @mousemove="mouseMove">
     <div class="img-wrapper">
-        <b-img
+        <b-img v-if="local<0"
+        :src="
+             imgUrl
+            "
+            alt="Image"
+            fluid
+            thumbnail
+            id="img"></b-img>
+                    <b-img v-else
         :src="
               require(`./assets/${imgUrl}`)
             "
@@ -21,6 +29,10 @@ export default {
     props: {
     imgUrl: {
       type: String,
+      required: true,
+    },  
+     local: {
+      type: Number,
       required: true,
     },
   },
